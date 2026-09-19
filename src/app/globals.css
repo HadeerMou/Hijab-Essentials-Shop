@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: 'Cormorant Garamond';
+    --font-sans: 'Jost';
+    --font-script: 'Parisienne';
+    --shell-x: clamp(1.25rem, 5vw, 5rem);
+    /* Height of the sticky nav bar — heroes pull up underneath it. */
+    --nav-h: 74px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 98px;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-ink text-paper;
+  }
+
+  /* A hairline that belongs to the brand, not to the browser. */
+  hr {
+    @apply border-0 border-t border-mist;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply bg-transparent outline-none;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-ash;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-1 ring-ink ring-offset-2 ring-offset-paper;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .shell {
+    padding-inline: var(--shell-x);
+    @apply mx-auto w-full max-w-shell;
+  }
+
+  /* Small caps label used for eyebrows, nav and buttons. */
+  .label {
+    @apply font-sans text-[0.68rem] uppercase tracking-widest;
+  }
+
+  .label-sm {
+    @apply font-sans text-[0.6rem] uppercase tracking-brand;
+  }
+
+  /* Editorial headline scale */
+  .h-display {
+    @apply font-display font-light leading-[0.94] tracking-[-0.01em];
+    font-size: clamp(2.75rem, 7.5vw, 6.5rem);
+  }
+
+  .h-section {
+    @apply font-display font-light leading-[1.02] tracking-[-0.01em];
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+  }
+
+  .h-card {
+    @apply font-display text-xl font-light leading-tight md:text-2xl;
+  }
+
+  .prose-brand {
+    @apply text-[0.95rem] leading-[1.85] text-smoke;
+  }
+
+  /* Buttons -------------------------------------------------------- */
+  .btn {
+    @apply label inline-flex items-center justify-center gap-2 px-8 py-4
+           transition-all duration-500 ease-silk disabled:cursor-not-allowed
+           disabled:opacity-40;
+  }
+
+  .btn-solid {
+    @apply btn bg-ink text-paper hover:bg-graphite;
+  }
+
+  .btn-outline {
+    @apply btn border border-ink text-ink hover:bg-ink hover:text-paper;
+  }
+
+  .btn-ghost {
+    @apply btn border border-mist text-ink hover:border-ink;
+  }
+
+  .btn-invert {
+    @apply btn bg-paper text-ink hover:bg-mist;
+  }
+
+  /* Underline that draws itself on hover, left to right. */
+  .link-sweep {
+    @apply relative inline-block;
+  }
+
+  .link-sweep::after {
+    content: '';
+    @apply absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0
+           bg-current transition-transform duration-500 ease-silk;
+  }
+
+  .link-sweep:hover::after {
+    @apply origin-left scale-x-100;
+  }
+
+  /* Permanently underlined, retracts on hover — used for active nav. */
+  .link-erase::after {
+    @apply origin-right scale-x-100;
+  }
+
+  .link-erase:hover::after {
+    @apply origin-left scale-x-0;
+  }
+
+  .field {
+    @apply w-full border-b border-mist bg-transparent py-3 text-sm
+           text-ink transition-colors duration-300 focus:border-ink;
+  }
+
+  .rule {
+    @apply h-px w-full bg-mist;
+  }
+
+  .img-cover {
+    @apply h-full w-full object-cover;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Paper grain — keeps large flat areas from looking like flat screens. */
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
+
+  .writing-vertical {
+    writing-mode: vertical-rl;
+  }
+
+  /* Slides a full-bleed hero up underneath the transparent sticky nav. */
+  .under-nav {
+    margin-top: calc(-1 * var(--nav-h));
+  }
+
+  .pad-nav {
+    padding-top: var(--nav-h);
+  }
+}
